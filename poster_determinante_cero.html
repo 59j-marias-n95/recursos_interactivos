@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Por qué el determinante de una matriz no puede ser 0?</title>
+    <!-- MathJax 3 -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --bg-page: #f1f5f9;
+            --bg-poster: #ffffff;
+            --primary: #0f172a;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --accent-amber: #d97706;
+            --accent-amber-light: #fffbeb;
+            --accent-rose: #e11d48;
+            --accent-rose-light: #fff1f2;
+            --accent-emerald: #059669;
+            --accent-emerald-light: #ecfdf5;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-subtle: #cbd5e1;
+        }
+
+        @page {
+            size: A3 landscape;
+            margin: 8mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .poster-container {
+            max-width: 1450px;
+            margin: 0 auto;
+            background: var(--bg-poster);
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* Encabezado */
+        .poster-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 32px 40px;
+            text-align: center;
+            border-bottom: 5px solid #38bdf8;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.2);
+            color: #7dd3fc;
+            border: 1px solid #38bdf8;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .poster-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .poster-header p {
+            margin: 0 auto;
+            max-width: 850px;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        /* Grid Principal de 3 Columnas */
+        .poster-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1.1fr 1.15fr;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        @media (max-width: 1150px) {
+            .poster-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Tarjetas de Paso */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .card.blue {
+            border-top: 5px solid var(--accent-blue);
+            background-color: #fafcff;
+        }
+
+        .card.amber {
+            border-top: 5px solid var(--accent-amber);
+            background-color: #fffdf7;
+        }
+
+        .card.rose {
+            border-top: 5px solid var(--accent-rose);
+            background-color: #fffafb;
+        }
+
+        .card.emerald {
+            border-top: 5px solid var(--accent-emerald);
+            background-color: #f7fdfb;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 8px;
+        }
+
+        .step-num {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
+        .card.blue .step-num { background: var(--accent-blue); }
+        .card.amber .step-num { background: var(--accent-amber); }
+        .card.rose .step-num { background: var(--accent-rose); }
+        .card.emerald .step-num { background: var(--accent-emerald); }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .card p {
+            margin: 8px 0;
+            font-size: 0.96rem;
+        }
+
+        .math-highlight {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 12px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .card.amber .math-highlight { border-left-color: var(--accent-amber); }
+        .card.rose .math-highlight { border-left-color: var(--accent-rose); }
+        .card.emerald .math-highlight { border-left-color: var(--accent-emerald); }
+
+        .conclusion-pill {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .pill-amber { background: var(--accent-amber-light); color: #92400e; border: 1px solid #fcd34d; }
+        .pill-rose { background: var(--accent-rose-light); color: #9f1239; border: 1px solid #fda4af; }
+        .pill-emerald { background: var(--accent-emerald-light); color: #065f46; border: 1px solid #6ee7b7; }
+
+        /* Sección de Gráficas Geométricas */
+        .graphs-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .graph-box {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .graph-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        .graph-caption {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        svg.cartesian {
+            width: 100%;
+            max-width: 310px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        /* Controles interactivos opcionales para explorar los casos */
+        .interactive-bar {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 10px;
+            font-size: 0.88rem;
+        }
+
+        .interactive-bar label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .interactive-bar input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Pie de página */
+        .poster-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 16px 30px;
+            font-size: 0.9rem;
+            border-top: 3px solid #1e293b;
+        }
+
+        .poster-footer strong {
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="poster-container">
+    <!-- ENCABEZADO -->
+    <header class="poster-header">
+        <div class="badge">Divulgación Matemática • Álgebra Lineal</div>
+        <h1>¿Por qué el determinante de una matriz no puede ser 0?</h1>
+        <p>De dónde nace este requisito al resolver un sistema de ecuaciones lineales.</p>
+    </header>
+
+    <!-- CUERPO DEL PÓSTER (3 COLUMNAS) -->
+    <div class="poster-grid">
+
+        <!-- COLUMNA 1: EL PROBLEMA Y EL DESPEJE ALGEBRAICO -->
+        <div class="column">
+            <!-- Paso 1 -->
+            <div class="card blue">
+                <div class="step-header">
+
+                    <h2 class="step-title">Sistema $2 \times 2$ con parámetros generales</h2>
+                </div>
+                <p>Consideremos un sistema lineal cotidiano de dos ecuaciones con dos incógnitas ($x, y$) y coeficientes indeterminados $a, b, c, d, e, f \in \mathbb{R}$:</p>
+                <div class="math-highlight">
+                    $$ \begin{cases} ax + by = c & \text{(Ecuación 1)}\\ dx + ey = f & \text{(Ecuación 2)}\end{cases} $$
+                </div>
+                <p>En forma matricial $A\mathbf{x} = \mathbf{b}$, la matriz de coeficientes es $A = \begin{pmatrix} a & b \\ d & e \end{pmatrix}$.</p>
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="card blue">
+                <div class="step-header">
+ 
+                    <h2 class="step-title">Método de sustitución</h2>
+                </div>
+                <p>Despejamos $y$ en la <strong>Ecuación 1</strong> (suponiendo $b \neq 0$):</p>
+                <div class="math-highlight">
+                    $$by = c - ax \implies y = \frac{c - ax}{b}$$
+                </div>
+                <p>Sustituimos esta expresión de $y$ dentro de la <strong>Ecuación 2</strong>:</p>
+                <div class="math-highlight">
+                    $$dx + e\left(\frac{c - ax}{b}\right) = f$$
+                </div>
+            </div>
+
+            <!-- Paso 3 -->
+            <div class="card blue">
+                <div class="step-header">
+
+                    <h2 class="step-title">Despeje de $x$: ¡Aparece el determinante!</h2>
+                </div>
+                <p>Multiplicamos toda la ecuación por $b$ para eliminar el denominador y agrupamos los términos con $x$:</p>
+                <div class="math-highlight">
+                    $$bdx + ec - eax = bf$$
+                    $$(bd - ae)x = bf - ec$$
+                </div>
+                <p>Cambiamos el signo en ambos lados (multiplicando por $-1$) para escribirlo en orden estándar y despejamos $x$:</p>
+                <div class="math-highlight">
+                    $$x = \frac{ce - bf}{ae - bd} = \frac{ce - bf}{\det(A)}$$
+                </div>
+                <p>El denominador $ae - bd$ es exactamente el <strong>determinante</strong> $\det(A)$. Si $\det(A) = 0$, la división queda indefinida.</p>
+            </div>
+        </div>
+
+        <!-- COLUMNA 2: ANÁLISIS DE LOS DOS CASOS CRÍTICOS -->
+        <div class="column">
+            <!-- Paso 4 y 5 -->
+            <div class="card amber">
+                <div class="step-header">
+
+                    <h2 class="step-title">Caso A: Múltiplo escalar completo ($0/0$)</h2>
+                </div>
+                <p>Supongamos que la segunda ecuación es un <strong>múltiplo escalar exacto</strong> de la primera para algún factor $\alpha \neq 0$:</p>
+                <div class="math-highlight">
+                    $$d = \alpha a, \qquad e = \alpha b, \qquad f = \alpha c$$
+                </div>
+                <p>Sustituimos estas relaciones en $x$:</p>
+                <div class="math-highlight">
+                    $$x = \frac{c(\alpha b) - b(\alpha c)}{a(\alpha b) - b(\alpha a)} = \frac{\alpha(bc - bc)}{\alpha(ab - ab)} = \frac{0}{0}$$
+                </div>
+                <p><strong>La forma $\frac{0}{0}$</strong> es una <em>indeterminación algebraica</em>. No es que falte solución, sino que cualquier número multiplicado por $0$ da $0$ ($0 \cdot x = 0$). Existen <strong>infinitas soluciones</strong> porque ambas ecuaciones contienen exactamente la misma información.</p>
+                <span class="conclusion-pill pill-amber">Resultado: Infinitas soluciones (Sistema Compatible)</span>
+            </div>
+
+            <!-- Paso 6 y 7 -->
+            <div class="card rose">
+                <div class="step-header">
+
+                    <h2 class="step-title">Caso B: Término independiente libre ($\text{Cte}/0$)</h2>
+                </div>
+                <p>Ahora supongamos que solo los coeficientes de las variables son proporcionales ($d = \alpha a$, $e = \alpha b$), pero $f$ es <strong>independiente</strong>:</p>
+                <div class="math-highlight">
+                    $$x = \frac{c(\alpha b) - bf}{a(\alpha b) - b(\alpha a)} = \frac{b(\alpha c - f)}{0} = \frac{\text{Constante}}{0}$$
+                </div>
+                <p><strong>La forma $\frac{\text{Constante}}{0}$</strong> es una <em>contradicción imposible</em>. Equivale a exigir que $0 \cdot x = b(\alpha c - f) 
+\neq 0$. Ningún número real multiplicado por cero produce una constante distinta de cero.</p>
+                <span class="conclusion-pill pill-rose">Resultado: Sin solución (Sistema Incompatible)</span>
+            </div>
+
+            <!-- Paso 8 -->
+            <div class="card emerald">
+                <div class="step-header">
+
+                    <h2 class="step-title">¿Por qué exigimos $\det(A) \neq 0$?</h2>
+                </div>
+                <p>El requisito $\det(A) = ae - bd  \neq 0$ es la garantía matemática de que las dos ecuaciones aportan <strong>información independiente y no contradictoria</strong>:</p>
+                <ul style="margin: 6px 0; padding-left: 20px; font-size: 0.94rem;">
+                    <li>Evita colapsar en $\frac{0}{0}$ (redundancia de datos).</li>
+                    <li>Evita caer en $\frac{\text{Cte}}{0}$ (inconsistencia lógica).</li>
+                    <li>Asegura que exista una <strong>única intersección</strong> $(x, y)$ y que la matriz inversa $A^{-1} = \frac{1}{\det(A)}\begin{pmatrix} e & -b \\ -d & a \end{pmatrix}$ esté bien definida.</li>
+                </ul>
+                <span class="conclusion-pill pill-emerald">$\det(A) \neq 0 \iff$ Solución única garantizada</span>
+            </div>
+        </div>
+
+        <!-- COLUMNA 3: INTERPRETACIÓN GEOMÉTRICA EN EL PLANO -->
+        <div class="column">
+            <div class="card blue" style="height: 100%;">
+                <div class="step-header">
+
+                    <h2 class="step-title">Interpretación Geométrica en el Plano $\mathbb{R}^2$</h2>
+                </div>
+                <p>Cada ecuación lineal representa una recta en el plano cartesiano con pendiente $m_1 = -a/b$ y $m_2 = -d/e$. Cuando $\det(A) = 0$, se cumple $\frac{a}{b} = \frac{d}{e}$, es decir, <strong>ambas rectas tienen exactamente la misma pendiente ($m_1 = m_2$)</strong>.</p>
+
+                <div class="graphs-container">
+                    <!-- Gráfica 1: Caso 0/0 Rectas Idénticas -->
+                    <div class="graph-box">
+                        <h4>1. Forma $\frac{0}{0}$: Rectas Idénticas (Coincidentes)</h4>
+                        <svg class="cartesian" viewBox="0 0 300 185" id="svg-coincident">
+                            <!-- Cuadrícula -->
+                            <g stroke="#e2e8f0" stroke-width="1">
+                                <line x1="30" y1="20" x2="30" y2="165"/><line x1="70" y1="20" x2="70" y2="165"/>
+                                <line x1="110" y1="20" x2="110" y2="165"/><line x1="190" y1="20" x2="190" y2="165"/>
+                                <line x1="230" y1="20" x2="230" y2="165"/><line x1="270" y1="20" x2="270" y2="165"/>
+                                <line x1="20" y1="35" x2="280" y2="35"/><line x1="20" y1="65" x2="280" y2="65"/>
+                                <line x1="20" y1="125" x2="280" y2="125"/><line x1="20" y1="155" x2="280" y2="155"/>
+                            </g>
+                            <!-- Ejes -->
+                            <line x1="150" y1="15" x2="150" y2="170" stroke="#64748b" stroke-width="1.5"/>
+                            <line x1="15" y1="95" x2="285" y2="95" stroke="#64748b" stroke-width="1.5"/>
+                            <text x="276" y="88" font-size="11" fill="#475569" font-weight="bold">x</text>
+                            <text x="156" y="24" font-size="11" fill="#475569" font-weight="bold">y</text>
+
+                            <!-- Recta 1 (Azul gruesa) -->
+                            <line x1="35" y1="155" x2="265" y2="30" stroke="#2563eb" stroke-width="6" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <!-- Recta 2 (Ámbar punteada superpuesta) -->
+                            <line x1="35" y1="155" x2="265" y2="30" stroke="#d97706" stroke-width="2.5" stroke-dasharray="7,5" stroke-linecap="round"/>
+
+                            <!-- Puntos infinitos resaltados -->
+                            <circle cx="92.5" cy="123.7" r="4" fill="#d97706"/>
+                            <circle cx="150" cy="92.5" r="4" fill="#d97706"/>
+                            <circle cx="207.5" cy="61.2" r="4" fill="#d97706"/>
+
+                            <!-- Leyenda interna -->
+                            <rect x="22" y="18" width="118" height="38" rx="4" fill="white" fill-opacity="0.9" stroke="#cbd5e1"/>
+                            <line x1="28" y1="30" x2="48" y2="30" stroke="#2563eb" stroke-width="4" stroke-opacity="0.5"/>
+                            <text x="53" y="33" font-size="9.5" fill="#1e293b">Ec. 1: ax + by = c</text>
+                            <line x1="28" y1="45" x2="48" y2="45" stroke="#d97706" stroke-width="2" stroke-dasharray="4,3"/>
+                            <text x="53" y="48" font-size="9.5" fill="#1e293b">Ec. 2: α(ax + by = c)</text>
+                        </svg>
+                        <p class="graph-caption">Al escalar toda la ecuación por $\alpha$, el intercepto también se escala igual, $f/\alpha b = c/b$. Una recta cae <strong>encima de la otra</strong>: se tocan en infinitos puntos.</p>
+                    </div>
+
+                    <!-- Gráfica 2: Caso Constante/0 Rectas Paralelas -->
+                    <div class="graph-box">
+                        <h4>2. Forma $\frac{\text{Cte}}{0}$: Rectas Paralelas Separadas</h4>
+                        <svg class="cartesian" viewBox="0 0 300 185" id="svg-parallel">
+                            <!-- Cuadrícula -->
+                            <g stroke="#e2e8f0" stroke-width="1">
+                                <line x1="30" y1="20" x2="30" y2="165"/><line x1="70" y1="20" x2="70" y2="165"/>
+                                <line x1="110" y1="20" x2="110" y2="165"/><line x1="190" y1="20" x2="190" y2="165"/>
+                                <line x1="230" y1="20" x2="230" y2="165"/><line x1="270" y1="20" x2="270" y2="165"/>
+                                <line x1="20" y1="35" x2="280" y2="35"/><line x1="20" y1="65" x2="280" y2="65"/>
+                                <line x1="20" y1="125" x2="280" y2="125"/><line x1="20" y1="155" x2="280" y2="155"/>
+                            </g>
+                            <!-- Ejes -->
+                            <line x1="150" y1="15" x2="150" y2="170" stroke="#64748b" stroke-width="1.5"/>
+                            <line x1="15" y1="95" x2="285" y2="95" stroke="#64748b" stroke-width="1.5"/>
+                            <text x="276" y="88" font-size="11" fill="#475569" font-weight="bold">x</text>
+                            <text x="156" y="24" font-size="11" fill="#475569" font-weight="bold">y</text>
+
+                            <!-- Recta 1 (Azul) -->
+                            <line x1="35" y1="142" x2="250" y2="25" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                            <!-- Recta 2 (Rosa paralela desplazada) -->
+                            <line id="line-parallel-2" x1="50" y1="168" x2="265" y2="51" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+
+                            <!-- Flechas de distancia constante -->
+                            <line id="dist-arrow" x1="150" y1="79.5" x2="150" y2="113.5" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="3,2"/>
+                            <text id="dist-label" x="155" y="102" font-size="9.5" fill="#9f1239" font-weight="bold">Δ ≠ 0</text>
+
+                            <!-- Leyenda interna -->
+                            <rect x="22" y="18" width="122" height="38" rx="4" fill="white" fill-opacity="0.9" stroke="#cbd5e1"/>
+                            <line x1="28" y1="30" x2="48" y2="30" stroke="#2563eb" stroke-width="3"/>
+                            <text x="53" y="33" font-size="9.5" fill="#1e293b">Ec. 1: ax + by = c</text>
+                            <line x1="28" y1="45" x2="48" y2="45" stroke="#e11d48" stroke-width="3"/>
+                            <text x="53" y="48" font-size="9.5" fill="#1e293b">Ec. 2: αax + αby = f</text>
+                        </svg>
+
+                        <!-- Control interactivo para desplazar f -->
+                        <div class="interactive-bar">
+                            <label for="f-slider">
+                                <span>Desplazar parámetro independiente $f$:</span>
+                                <span id="f-status" style="color: #e11d48;">f ≠ αc (Paralelas)</span>
+                            </label>
+                            <input type="range" id="f-slider" min="-35" max="35" value="34">
+                        </div>
+
+                        <p class="graph-caption">Tienen igual inclinación ($m_1 = m_2$), pero distinto corte con el eje $y$ ($f/\alpha b \neq c/b$). Nunca se cruzan. <em>(Mueve el deslizador para ver cómo al hacer $f = \alpha c$ colapsan en el caso $0/0$).</em></p>
+                    </div>
+
+                    <!-- Gráfica 3: Caso det(A) != 0 -->
+                    <div class="graph-box" style="border-color: #6ee7b7; background: #f7fdfb;">
+                        <h4>3. Caso Ideal $\det(A) \neq 0$: Rectas Secantes (Solución Única)</h4>
+                        <svg class="cartesian" viewBox="0 0 300 140">
+                            <line x1="150" y1="10" x2="150" y2="130" stroke="#94a3b8" stroke-width="1.2"/>
+                            <line x1="20" y1="70" x2="280" y2="70" stroke="#94a3b8" stroke-width="1.2"/>
+                            <!-- Recta 1 -->
+                            <line x1="40" y1="115" x2="260" y2="25" stroke="#2563eb" stroke-width="2.5"/>
+                            <!-- Recta 2 distinta pendiente -->
+                            <line x1="55" y1="20" x2="245" y2="120" stroke="#059669" stroke-width="2.5"/>
+                            <!-- Punto único de intersección -->
+                            <circle cx="150" cy="70" r="5.5" fill="#059669" stroke="white" stroke-width="1.5"/>
+                            <text x="160" y="64" font-size="10.5" fill="#065f46" font-weight="bold">(x, y) único</text>
+                        </svg>
+                        <p class="graph-caption">Pendientes distintas ($m_1 \neq m_2 \iff ae - bd \neq 0$): las rectas se cortan en un solo punto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="poster-footer">
+        <strong>Vida Normal de un Estudiante de Física y Matemáticas</strong> • José Moisés Arias
+    </footer>
+</div>
+
+<script>
+    // Interactividad para visualizar la transición entre Constante/0 (Paralelas) y 0/0 (Coincidentes)
+    const slider = document.getElementById('f-slider');
+    const line2 = document.getElementById('line-parallel-2');
+    const distArrow = document.getElementById('dist-arrow');
+    const distLabel = document.getElementById('dist-label');
+    const fStatus = document.getElementById('f-status');
+
+    slider.addEventListener('input', function() {
+        const offset = parseInt(this.value, 10);
+        line2.setAttribute('x1', 35);
+        line2.setAttribute('x2', 250);
+
+        if (Math.abs(offset) <= 2) {
+            line2.setAttribute('y1', 142);
+            line2.setAttribute('y2', 25);
+            line2.setAttribute('stroke', '#d97706');
+            line2.setAttribute('stroke-dasharray', '6,4');
+            distArrow.setAttribute('opacity', '0');
+            distLabel.textContent = '0/0';
+            distLabel.setAttribute('y', '72');
+            distLabel.setAttribute('fill', '#d97706');
+            fStatus.textContent = 'f = αc → Forma 0/0 (Idénticas)';
+            fStatus.style.color = '#d97706';
+        } else {
+	    const y1 = 142 + offset;
+            const y2 = 25 + offset;
+            const yMid = 79.4 + offset	
+	    
+            line2.setAttribute('y1', y1);
+            line2.setAttribute('y2', y2);
+            line2.setAttribute('stroke', '#e11d48');
+            line2.removeAttribute('stroke-dasharray');
+            distArrow.setAttribute('opacity', '1');
+            distArrow.setAttribute('y1', 79.4);
+            distArrow.setAttribute('y2', yMid);
+            distLabel.textContent = 'Cte/0';
+            distLabel.setAttribute('y', (79.4 + yMid) / 2 + 4);
+            distLabel.setAttribute('fill', '#9f1239');
+            fStatus.textContent = 'f ≠ αc → Forma Cte/0 (Paralelas)';
+            fStatus.style.color = '#e11d48';
+        }
+    });
+</script>
+</body>
+</html>
