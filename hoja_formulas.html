@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Propiedades de los números reales</title>
+    <!-- Carga de MathJax para renderizar fórmulas matemáticas (LaTeX) -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Configuración de tamaño carta y márgenes de impresión */
+        @page {
+            size: A3;
+            margin: 1mm;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e2e8f0;
+            margin: 0;
+            padding: 5px;
+        }
+        /* Contenedor que simula la hoja física tamaño carta */
+        .page-carta {
+            width: 297.0mm;
+            min-height: 420.0mm; 
+            background: #f5f3ff; 
+            margin: 0 auto;
+            padding: 1px 5px;
+            box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        /* Encabezados */
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            color: #0f172a;
+            margin-bottom: 5px;
+            font-size: 28px;
+            border-bottom: 2px solid #0284c7;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+        .header h2 {
+            color: #475569;
+            margin-top: 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        /* Configuración de dos columnas */
+        .content {
+            column-count: 2;
+            column-gap: 30px;
+            column-rule: 1px solid #cbd5e1;
+        }
+        /* Estilos de los bloques de fórmulas (marcos, bordes y colores) */
+        .formula-box {
+            border: 2px solid #3b82f6; /* Borde azul general */
+            border-left-width: 8px; /* Borde izquierdo más grueso */
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #eff6ff; /* Fondo azul muy claro */
+            break-inside: avoid; /* Evita que el bloque se corte entre columnas */
+            page-break-inside: avoid;
+        }
+        /* Variaciones de color para distintos bloques */
+        .formula-box.purple {
+            border-color: #8b5cf6;
+            background-color: #f5f3ff;
+        }
+        .formula-box.green {
+            border-color: #10b981;
+            background-color: #ecfdf5;
+        }
+        .formula-box.orange {
+            border-color: #f59e0b;
+            background-color: #fffbeb;
+        }
+        .formula-box.rose {
+            border-color: #e11d48;
+            background-color: #fff1f2;
+        }
+        .formula-box h3 {
+            margin-top: 0;
+            color: #1e293b;
+            font-size: 16px;
+            border-bottom: 1px dashed #94a3b8;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+        .formula-box p {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #334155;
+            margin: 5px 0 10px 0;
+        }
+        .math-block {
+            text-align: center;
+            margin: 12px 0;
+            font-size: 1.15em;
+            color: #000;
+        }
+        /* Estilos del pie de página */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 10px;
+            border-top: 2px solid #cbd5e1;
+            font-size: 13px;
+            color: #64748b;
+            clear: both; /* Asegura que se coloque debajo de las columnas */
+            column-span: all; /* Si está dentro del contenedor de columnas */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-carta">
+        <!-- Título y Subtítulo -->
+        <div class="header">
+            <h1>Propiedades de los números reales</h1>
+            <h2>Hoja de fórmulas y repaso rápido</h2>
+        </div>
+        
+        <!-- Contenedor a dos columnas -->
+        <div class="content">
+            
+            <!-- 1. Conmutativa, distributiva y asociativa -->
+            <div class="formula-box">
+                <h3>Leyes Fundamentales</h3>
+                <p><strong>Conmutativa:</strong> El orden no altera el resultado.</p>
+                <div class="math-block">
+                    \(a + b = b + a\) <br><br>
+                    \(ab = ba\)
+                </div>
+                <p><strong>Asociativa:</strong> La agrupación no altera el resultado.</p>
+                <div class="math-block">
+                    \((a + b) + c = a + (b + c)\) <br><br>
+                    \((ab)c = a(bc)\)
+                </div>
+                <p><strong>Distributiva:</strong> Relación entre suma y multiplicación.</p>
+                <div class="math-block">
+                    \(a(b + c) = ab + ac\)
+                </div>
+            </div>
+
+            <!-- 2. Definición de la resta -->
+            <div class="formula-box rose">
+                <h3>Definición de la Resta</h3>
+                <p>Restar un número equivale a sumar su inverso aditivo.</p>
+                <div class="math-block">
+                    \(a - b = a + (-b)\)
+                </div>
+            </div>
+
+            <!-- 3. Elemento identidad -->
+            <div class="formula-box green">
+                <h3>Elementos de Identidad</h3>
+                <p>Operaciones que dejan al número inalterado.</p>
+                <p><strong>Identidad Aditiva (Cero):</strong></p>
+                <div class="math-block">
+                    \(a + 0 = a\)
+                </div>
+                <p><strong>Identidad Multiplicativa (Uno):</strong></p>
+                <div class="math-block">
+                    \(a \cdot 1 = a\)
+                </div>
+            </div>
+
+            <!-- 4. Existencia del inverso aditivo y recíproco -->
+            <div class="formula-box orange">
+                <h3>Inversos</h3>
+                <p><strong>Inverso Aditivo:</strong> Resulta en la identidad aditiva.</p>
+                <div class="math-block">
+                    \(a + (-a) = 0\)
+                </div>
+                <p><strong>Recíproco (Inverso Multiplicativo):</strong> Resulta en la identidad multiplicativa.</p>
+                <div class="math-block">
+                    \(a \cdot \frac{1}{a} = 1 \quad (a \neq 0)\)
+                </div>
+            </div>
+
+            <!-- 5. Propiedades de las fracciones -->
+            <div class="formula-box purple">
+                <h3>Propiedades de las Fracciones</h3>
+                <div class="math-block">
+                    Multiplicación: \(\frac{a}{b} \cdot \frac{c}{d} = \frac{ac}{bd}\)
+                </div>
+                <div class="math-block">
+                    Suma (Igual base): \(\frac{a}{b} + \frac{c}{b} = \frac{a+c}{b}\)
+                </div>
+                <div class="math-block">
+                    Suma (Dist. base): \(\frac{a}{b} + \frac{c}{d} = \frac{ad+bc}{bd}\)
+                </div>
+                <div class="math-block">
+                    División: \(\frac{a/b}{c/d} = \frac{ad}{bc}\)
+                </div>
+            </div>
+
+            <!-- 6. Propiedades de las potencias -->
+            <div class="formula-box">
+                <h3>Propiedades de las Potencias</h3>
+                <div class="math-block">
+                    \(a^m \cdot a^n = a^{m+n}\)
+                </div>
+                <div class="math-block">
+                    \(\frac{a^m}{a^n} = a^{m-n} \quad (a \neq 0)\)
+                </div>
+                <div class="math-block">
+                    \((a^m)^n = a^{mn}\)
+                </div>
+                <div class="math-block">
+                    \((ab)^n = a^n b^n\)
+                </div>
+                <div class="math-block">
+                    \(a^{-n} = \frac{1}{a^n} \quad (a \neq 0)\)
+                </div>
+                <div class="math-block">
+                    \(a^0 = 1 \quad (a \neq 0)\)
+                </div>
+            </div>
+
+            <!-- 7. Raíces como potencias racionales -->
+            <div class="formula-box green">
+                <h3>Raíces (Potencias Racionales)</h3>
+                <div class="math-block">
+                    \(a^{\frac{1}{n}} = \sqrt[n]{a}\)
+                </div>
+                <div class="math-block">
+                    \(a^{\frac{m}{n}} = \sqrt[n]{a^m} = (\sqrt[n]{a})^m\)
+                </div>
+            </div>
+
+            <!-- 8. Propiedades de las ecuaciones -->
+            <div class="formula-box rose">
+                <h3>Propiedades de la Igualdad</h3>
+                <p><strong>Reflexividad:</strong> Todo es igual a sí mismo.</p>
+                <div class="math-block">
+                    \(a = a\)
+                </div>
+                <p><strong>Simetría:</strong> El orden de la igualdad no importa.</p>
+                <div class="math-block">
+                    Si \(a = b \implies b = a\)
+                </div>
+                <p><strong>Transitividad:</strong> Dos cosas iguales a una tercera, son iguales entre sí.</p>
+                <div class="math-block">
+                    Si \(a = b\) y \(b = c \implies a = c\)
+                </div>
+            </div>
+            
+            <!-- 9. Reglas del Cero y Cancelación -->
+            <div class="formula-box purple">
+                <h3>Cero y Cancelación</h3>
+                <p><strong>Regla del producto cero:</strong></p>
+                <div class="math-block">
+                    Si \(ab = 0 \implies a = 0\) ó \(b = 0\)
+                </div>
+                <p><strong>Regla de la cancelación:</strong></p>
+                <div class="math-block">
+                    Si \(a + c = b + c \implies a = b\)
+                </div>
+                <div class="math-block">
+                    Si \(ac = bc\) y \(c \neq 0 \implies a = b\)
+                </div>
+            </div>
+
+            <!-- 10. Productos Notables -->
+            <div class="formula-box orange">
+                <h3>Productos Notables</h3>
+                <p><strong>Cuadrado de un binomio:</strong></p>
+                <div class="math-block">
+                    \((a + b)^2 = a^2 + 2ab + b^2\)
+                </div>
+                <div class="math-block">
+                    \((a - b)^2 = a^2 - 2ab + b^2\)
+                </div>
+                <p><strong>Cubo de un binomio:</strong></p>
+                <div class="math-block">
+                    \((a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3\)
+                </div>
+                <div class="math-block">
+                    \((a - b)^3 = a^3 - 3a^2b + 3ab^2 - b^3\)
+                </div>
+            </div>
+      </div>
+      <!-- Pie de página -->
+      <div class="footer">
+          <strong>Autor:</strong> José Moisés Arias &nbsp;|&nbsp; <strong>Blog:</strong> Vida Normal de un Estudiante de Física y Matemáticas
+      </div>    
+    </div>
+</body>
+</html>
