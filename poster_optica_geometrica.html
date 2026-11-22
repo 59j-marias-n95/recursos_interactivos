@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Óptica Geométrica: Reflexión, Refracción y Reflexión Interna Total</title>
+    <!-- MathJax 3 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --bg-page: #f1f5f9;
+            --bg-poster: #ffffff;
+            --primary: #0f172a;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --accent-teal: #0d9488;
+            --accent-teal-light: #f0fdfa;
+            --accent-amber: #d97706;
+            --accent-amber-light: #fffbeb;
+            --accent-rose: #e11d48;
+            --accent-rose-light: #fff1f2;
+            --accent-indigo: #4f46e5;
+            --accent-indigo-light: #eef2ff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-subtle: #cbd5e1;
+        }
+
+        @page {
+            size: A3 landscape;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 16px;
+            line-height: 1.48;
+        }
+
+        .poster-container {
+            max-width: 1520px;
+            margin: 0 auto;
+            background: var(--bg-poster);
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* Encabezado */
+        .poster-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #0f766e 100%);
+            color: white;
+            padding: 26px 36px;
+            text-align: center;
+            border-bottom: 5px solid #38bdf8;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.18);
+            color: #7dd3fc;
+            border: 1px solid #38bdf8;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .poster-header h1 {
+            margin: 0 0 8px 0;
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .poster-header p {
+            margin: 0 auto;
+            max-width: 920px;
+            font-size: 1.05rem;
+            color: #e2e8f0;
+        }
+
+        .print-btn {
+            margin-top: 12px;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: background 0.2s;
+        }
+
+        .print-btn:hover {
+            background: #7dd3fc;
+        }
+
+        /* Grid Principal de 3 Columnas */
+        .poster-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.02fr 1.22fr;
+            gap: 18px;
+            padding: 20px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 1200px) {
+            .poster-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Tarjetas */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        .card.blue {
+            border-top: 5px solid var(--accent-blue);
+            background-color: #fafcff;
+        }
+
+        .card.teal {
+            border-top: 5px solid var(--accent-teal);
+            background-color: #f7fefe;
+        }
+
+        .card.amber {
+            border-top: 5px solid var(--accent-amber);
+            background-color: #fffdf7;
+        }
+
+        .card.rose {
+            border-top: 5px solid var(--accent-rose);
+            background-color: #fffafb;
+        }
+
+        .card.indigo {
+            border-top: 5px solid var(--accent-indigo);
+            background-color: #fafaff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 7px;
+        }
+
+        .section-tag {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 3px 9px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+
+        .card.blue .section-tag { background: var(--accent-blue); }
+        .card.teal .section-tag { background: var(--accent-teal); }
+        .card.amber .section-tag { background: var(--accent-amber); }
+        .card.rose .section-tag { background: var(--accent-rose); }
+        .card.indigo .section-tag { background: var(--accent-indigo); }
+
+        .section-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .card p {
+            margin: 6px 0;
+            font-size: 0.93rem;
+        }
+
+        .math-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 9px 12px;
+            margin: 9px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .card.teal .math-box { border-left-color: var(--accent-teal); }
+        .card.amber .math-box { border-left-color: var(--accent-amber); }
+        .card.rose .math-box { border-left-color: var(--accent-rose); }
+        .card.indigo .math-box { border-left-color: var(--accent-indigo); }
+
+        .mini-diagram {
+            display: flex;
+            justify-content: space-around;
+            gap: 8px;
+            margin-top: 8px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .mini-item {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex: 1;
+        }
+
+        .mini-item strong {
+            display: block;
+            color: var(--primary);
+            font-size: 0.82rem;
+            margin-bottom: 2px;
+        }
+
+        /* Lista de pruebas y guía metodológica (Columna 2) */
+        .test-list {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .test-list li {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 9px 11px;
+            font-size: 0.9rem;
+        }
+
+        .test-list li strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .table-indices {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 0.83rem;
+            background: #ffffff;
+        }
+
+        .table-indices th, .table-indices td {
+            border: 1px solid #cbd5e1;
+            padding: 5px 8px;
+            text-align: center;
+        }
+
+        .table-indices th {
+            background: #f1f5f9;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Columna 3: Simulador Interactivo */
+.sim-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+svg#optical-bench {
+    width: 100%;
+    max-width: 485px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+        .preset-btn {
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            color: var(--primary);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .preset-btn:hover {
+            background: var(--accent-indigo-light);
+            border-color: var(--accent-indigo);
+            color: var(--accent-indigo);
+        }
+
+        .optical-canvas-wrap {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        svg#optical-bench {
+            width: 100%;
+            max-width: 440px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Controles deslizadores */
+        .controls-panel {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 11px 13px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .slider-val {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 1px 7px;
+            border-radius: 5px;
+            font-size: 0.83rem;
+            color: var(--accent-indigo);
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: var(--accent-indigo);
+        }
+
+        /* Telemetría y Validación en Vivo */
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+            margin-top: 10px;
+        }
+
+        .tele-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            padding: 6px 9px;
+            font-size: 0.82rem;
+        }
+
+        .tele-label {
+            color: var(--text-muted);
+            font-size: 0.76rem;
+            display: block;
+        }
+
+        .tele-value {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--primary);
+        }
+
+        .status-banner {
+            margin-top: 9px;
+            padding: 8px 11px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .status-refraction {
+            background: var(--accent-blue-light);
+            color: #1e40af;
+            border-color: #93c5fd;
+        }
+
+        .status-critical {
+            background: var(--accent-amber-light);
+            color: #92400e;
+            border-color: #fcd34d;
+        }
+
+        .status-tir {
+            background: var(--accent-rose-light);
+            color: #9f1239;
+            border-color: #fda4af;
+        }
+
+        /* Pie de página */
+        .poster-footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+            padding: 13px 28px;
+            font-size: 0.88rem;
+            border-top: 3px solid #1e293b;
+        }
+
+        .poster-footer strong {
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           CALIBRACIÓN AUTOMÁTICA PARA IMPRESIÓN EN 1 HOJA A3
+           ========================================================= */
+        @media print {
+            @page {
+                size: A3 landscape;
+                margin: 0;
+            }
+
+            html, body {
+                width: 420mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #ffffff !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .poster-container {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 1520px !important;
+                max-width: none !important;
+                height: auto !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                transform-origin: top left !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .poster-grid {
+                grid-template-columns: 1fr 1.02fr 1.22fr !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="poster-container">
+    <!-- ENCABEZADO -->
+    <header class="poster-header">
+        <div class="badge">Divulgación Científica • Óptica Geométrica</div>
+        <h1>Leyes de Reflexión, Refracción y Reflexión Interna Total</h1>
+        <p>Marco teórico, validación experimental e interacción en tiempo real sobre el comportamiento de los rayos luminosos en interfaces dieléctricas.</p>
+    </header>
+
+    <!-- CUERPO DE 3 COLUMNAS -->
+    <div class="poster-grid">
+
+        <!-- =========================================================
+             COLUMNA 1: MARCO TEÓRICO
+             ========================================================= -->
+        <div class="column">
+            <div class="card blue">
+                <div class="section-header">
+                    <span class="section-tag">1. Fundamentos</span>
+                    <h2 class="section-title">Aproximación de Rayos e Índice $n$</h2>
+                </div>
+                <p>Cuando la longitud de onda de la luz es mucho menor que las dimensiones de los obstáculos ($\lambda \ll d$), la propagación se modela mediante <strong>rayos geométricos</strong> gobernados por el <em>Principio de Fermat</em> (trayectoria de tiempo óptico estacionario).</p>
+                <p>Cada medio óptico homogéneo e isótropo se caracteriza por su <strong>índice de refracción absoluto</strong>:</p>
+                <div class="math-box">
+                    $$n = \frac{c}{v} \ge 1$$
+                </div>
+                <p>donde $c \approx 3.00 \times 10^8\,\text{m/s}$ es la velocidad de la luz en el vacío y $v$ es su velocidad de fase en el medio.</p>
+            </div>
+
+            <div class="card teal">
+                <div class="section-header">
+                    <span class="section-tag">2. Leyes Fundamentales</span>
+                    <h2 class="section-title">Reflexión y Refracción (Snell)</h2>
+                </div>
+                <p>Al incidir un rayo sobre la frontera entre dos medios ($n_1$ y $n_2$) formando un ángulo $\theta_i$ respecto a la <strong>recta normal</strong> $\hat{\mathbf{n}}$, el rayo incidente, el reflejado, el refractado y la normal son <em>coplanares</em>:</p>
+                <div class="math-box">
+                    $$\textbf{Ley de Reflexión:} \quad \theta_r = \theta_i$$
+                    $$\textbf{Ley de Snell:} \quad n_1 \sin\theta_i = n_2 \sin\theta_t$$
+                </div>
+                <div class="mini-diagram">
+                    <div class="mini-item">
+                        <strong>$n_1 < n_2$ (Medio más denso)</strong>
+                        $\sin\theta_t < \sin\theta_i \implies \theta_t < \theta_i$<br>El rayo se <em>acerca</em> a la normal.
+                    </div>
+                    <div class="mini-item" style="border-left: 1px dashed #cbd5e1; padding-left: 8px;">
+                        <strong>$n_1 > n_2$ (Medio menos denso)</strong>
+                        $\sin\theta_t > \sin\theta_i \implies \theta_t > \theta_i$<br>El rayo se <em>aleja</em> de la normal.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card rose" style="flex: 1;">
+                <div class="section-header">
+                    <span class="section-tag">3. Fenómeno Límite</span>
+                    <h2 class="section-title">Reflexión Interna Total (RIT)</h2>
+                </div>
+                <p>Cuando la luz viaja hacia un medio de menor índice (<strong>$n_1 > n_2$</strong>), el ángulo refractado $\theta_t$ crece más rápido que $\theta_i$. El <strong>ángulo crítico $\theta_c$</strong> ocurre cuando el rayo emerge rasante a la interfaz ($\theta_t = 90^\circ$):</p>
+                <div class="math-box">
+                    $$n_1 \sin\theta_c = n_2 \sin(90^\circ) \implies \theta_c = \arcsin\!\left(\frac{n_2}{n_1}\right)$$
+                </div>
+                <p>Si <strong>$\theta_i > \theta_c$</strong>, la ecuación de Snell exige $\sin\theta_t = \frac{n_1}{n_2}\sin\theta_i > 1$, lo cual carece de solución real. No existe onda transmitida propagante: <strong>el $100\%$ de la energía luminosa se refleja</strong> de vuelta al medio $1$.</p>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             COLUMNA 2: VALIDACIÓN Y APLICACIONES EN ÓPTICA GEOMÉTRICA
+             ========================================================= -->
+        <div class="column">
+            <div class="card amber">
+                <div class="section-header">
+                    <span class="section-tag">Objetivos</span>
+                    <h2 class="section-title">¿Qué busca probar la simulación?</h2>
+                </div>
+                <ul class="test-list">
+                    <li>
+                        <strong>1. Simetría exacta de la reflexión ($\theta_r = \theta_i$):</strong>
+                        Validar que el ángulo de reflexión depende exclusivamente de la geometría de incidencia y permanece inalterado aunque cambien $n_1$ o $n_2$.
+                    </li>
+                    <li>
+                        <strong>2. Conservación del invariante de Snell:</strong>
+                        Comprobar numéricamente en tiempo real que $n_1\sin\theta_i = n_2\sin\theta_t$ se cumple con precisión en todo el dominio de refracción ordinaria.
+                    </li>
+                    <li>
+                        <strong>3. Asimetría del paso entre medios ($n_1 \lessgtr n_2$):</strong>
+                        Demostrar por qué existe refracción para todo $\theta_i \in [0^\circ, 90^\circ)$ cuando $n_1 < n_2$, mientras que aparece una zona prohibida para la transmisión cuando $n_1 > n_2$.
+                    </li>
+                    <li>
+                        <strong>4. Transición abrupta en el ángulo crítico ($\theta_c$):</strong>
+                        Visualizar cómo al alcanzar $\theta_i = \theta_c$ el haz refractado se vuelve paralelo a la frontera ($\theta_t = 90^\circ$) y desaparece al superar dicho umbral.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card blue" style="flex: 1;">
+                <div class="section-header">
+                    <span class="section-tag">Guía Metodológica</span>
+                    <h2 class="section-title">¿Cómo emplearla en óptica geométrica?</h2>
+                </div>
+                <p>Utiliza los deslizadores y escenarios predefinidos de la tercera columna para analizar problemas clásicos de diseño óptico:</p>
+                <ul class="test-list">
+                    <li>
+                        <strong>Diseño de fibras ópticas y guías de onda:</strong>
+                        Ajusta un núcleo de mayor índice ($n_1 = 1.48$) y un revestimiento menor ($n_2 = 1.46$). Observa cómo $\theta_c \approx 80.6^\circ$ define el cono de aceptación para confinar pulsos de luz sin pérdidas.
+                    </li>
+                    <li>
+                        <strong>Cálculo de ángulos límite y dispersión de brillo:</strong>
+                        Compara las interfaces hacia el aire ($n_2 = 1.00$) para distintos materiales y verifica experimentalmente los valores teóricos de $\theta_c$:
+                    </li>
+                </ul>
+
+                <table class="table-indices">
+                    <thead>
+                        <tr>
+                            <th>Interfaz ($n_1 \to n_2$)</th>
+                            <th>$n_1$</th>
+                            <th>$n_2$</th>
+                            <th>$\theta_c$ Teórico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Agua $\to$ Aire</td>
+                            <td>$1.33$</td>
+                            <td>$1.00$</td>
+                            <td>$48.75^\circ$</td>
+                        </tr>
+                        <tr>
+                            <td>Vidrio Crown $\to$ Aire</td>
+                            <td>$1.52$</td>
+                            <td>$1.00$</td>
+                            <td>$41.14^\circ$</td>
+                        </tr>
+                        <tr>
+                            <td>Diamante $\to$ Aire</td>
+                            <td>$2.42$</td>
+                            <td>$1.00$</td>
+                            <td>$24.41^\circ$</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-muted);">
+                    <em>Sugerencia:</em> Evalúa también la <strong>incidencia normal</strong> ($\theta_i = 0^\circ$) para comprobar que el rayo cruza sin desviarse ($\delta = |\theta_i - \theta_t| = 0^\circ$) independientemente del contraste entre $n_1$ y $n_2$.
+                </p>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             COLUMNA 3: BANCO ÓPTICO INTERACTIVO
+             ========================================================= -->
+        <div class="column">
+            <div class="card indigo sim-card">
+                <div>
+                    <div class="section-header">
+                        <span class="section-tag">Simulador Interactivo</span>
+                        <h2 class="section-title">Banco Óptico de Interfaces Dieléctricas</h2>
+                    </div>
+
+                    <!-- Botones de escenarios rápidos -->
+                    <div class="presets-row">
+                        <button class="preset-btn" onclick="setPreset(35, 1.00, 1.33)">Aire → Agua</button>
+                        <button class="preset-btn" onclick="setPreset(40, 1.33, 1.00)">Agua → Aire</button>
+                        <button class="preset-btn" onclick="setPreset(45, 1.52, 1.00)">Vidrio → Aire (RIT)</button>
+                        <button class="preset-btn" onclick="setPreset(82, 1.48, 1.46)">Fibra Óptica</button>
+                        <button class="preset-btn" onclick="setPreset(26, 2.42, 1.00)">Diamante → Aire</button>
+                    </div>
+
+                    <!-- Lienzo SVG del Simulador -->
+                    <div class="optical-canvas-wrap">
+                        <svg id="optical-bench" viewBox="0 0 420 340">
+                            <defs>
+                                <!-- Marcadores de flecha direccional -->
+                                <marker id="arrow-inc" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#ea580c"/>
+                                </marker>
+                                <marker id="arrow-ref" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#0d9488"/>
+                                </marker>
+                                <marker id="arrow-tir" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#e11d48"/>
+                                </marker>
+                                <marker id="arrow-tra" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Fondos de Medio 1 y Medio 2 -->
+                            <rect id="bg-med1" x="0" y="0" width="420" height="170" fill="#f8fafc"/>
+                            <rect id="bg-med2" x="0" y="170" width="420" height="170" fill="#e0f2fe"/>
+
+                            <!-- Transportador graduado centrado en (210, 170) -->
+                            <circle cx="210" cy="170" r="115" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+                            <g id="protractor-ticks"></g>
+
+                            <!-- Línea de interfaz y Normal -->
+                            <line x1="0" y1="170" x2="420" y2="170" stroke="#334155" stroke-width="2"/>
+                            <line x1="210" y1="14" x2="210" y2="326" stroke="#475569" stroke-width="1.5" stroke-dasharray="6,4"/>
+                            <text x="216" y="25" font-size="11" font-weight="bold" fill="#334155">Normal (n̂)</text>
+
+                            <!-- Etiquetas de los medios -->
+                            <text id="label-med1" x="12" y="24" font-size="11.5" font-weight="bold" fill="#1e293b">Medio 1: n₁ = 1.00 (Aire)</text>
+                            <text id="label-med2" x="12" y="328" font-size="11.5" font-weight="bold" fill="#1e293b">Medio 2: n₂ = 1.33 (Agua)</text>
+
+                            <!-- Guías del Ángulo Crítico (visibles solo si n1 > n2) -->
+                            <g id="critical-guides" opacity="0">
+                                <line id="crit-line-left" x1="210" y1="170" x2="210" y2="40" stroke="#9333ea" stroke-width="1.3" stroke-dasharray="4,3"/>
+                                <line id="crit-line-right" x1="210" y1="170" x2="210" y2="40" stroke="#9333ea" stroke-width="1.3" stroke-dasharray="4,3"/>
+                                <text id="crit-label" x="120" y="45" font-size="10" font-weight="bold" fill="#7e22ce">θc</text>
+                            </g>
+
+                            <!-- Arcos angulares -->
+                            <path id="arc-inc" d="" fill="none" stroke="#ea580c" stroke-width="1.8"/>
+                            <path id="arc-ref" d="" fill="none" stroke="#0d9488" stroke-width="1.8"/>
+                            <path id="arc-tra" d="" fill="none" stroke="#2563eb" stroke-width="1.8"/>
+
+                            <!-- Rayo Incidente (dos segmentos para colocar flecha limpia a mitad de camino) -->
+                            <line id="ray-inc-1" x1="120" y1="50" x2="165" y2="110" stroke="#ea580c" stroke-width="3.2" marker-end="url(#arrow-inc)"/>
+                            <line id="ray-inc-2" x1="165" y1="110" x2="210" y2="170" stroke="#ea580c" stroke-width="3.2"/>
+
+                            <!-- Rayo Reflejado -->
+                            <line id="ray-ref-1" x1="210" y1="170" x2="255" y2="110" stroke="#0d9488" stroke-width="2.6" marker-end="url(#arrow-ref)"/>
+                            <line id="ray-ref-2" x1="255" y1="110" x2="300" y2="50" stroke="#0d9488" stroke-width="2.6"/>
+
+                            <!-- Rayo Refractado / Transmitido -->
+                            <g id="group-refracted">
+                                <line id="ray-tra-1" x1="210" y1="170" x2="245" y2="235" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow-tra)"/>
+                                <line id="ray-tra-2" x1="245" y1="235" x2="280" y2="300" stroke="#2563eb" stroke-width="3"/>
+                            </g>
+
+                            <!-- Punto de incidencia -->
+                            <circle cx="210" cy="170" r="4.5" fill="#0f172a" stroke="#ffffff" stroke-width="1.5"/>
+
+                            <!-- Etiquetas dinámicas de ángulos -->
+                            <text id="txt-theta-i" x="175" y="115" font-size="11" font-weight="bold" fill="#c2410c">θᵢ</text>
+                            <text id="txt-theta-r" x="232" y="115" font-size="11" font-weight="bold" fill="#0f766e">θᵣ</text>
+                            <text id="txt-theta-t" x="228" y="232" font-size="11" font-weight="bold" fill="#1d4ed8">θₜ</text>
+
+                            <!-- Leyenda superior derecha -->
+                            <rect x="292" y="10" width="118" height="54" rx="5" fill="#ffffff" fill-opacity="0.92" stroke="#cbd5e1"/>
+                            <line x1="298" y1="22" x2="314" y2="22" stroke="#ea580c" stroke-width="3"/>
+                            <text x="319" y="25" font-size="9.5" fill="#1e293b">Rayo Incidente</text>
+                            <line x1="298" y1="37" x2="314" y2="37" stroke="#0d9488" stroke-width="2.5"/>
+                            <text x="319" y="40" font-size="9.5" fill="#1e293b">Rayo Reflejado</text>
+                            <line x1="298" y1="52" x2="314" y2="52" stroke="#2563eb" stroke-width="3"/>
+                            <text x="319" y="55" font-size="9.5" fill="#1e293b">Rayo Refractado</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Controles Deslizadores -->
+                <div>
+                    <div class="controls-panel">
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <label for="slider-theta">Ángulo de incidencia ($\theta_i$):</label>
+                                <span class="slider-val" id="val-theta">35.0°</span>
+                            </div>
+                            <input type="range" id="slider-theta" min="0" max="89.5" step="0.5" value="35">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <label for="slider-n1">Índice de refracción Medio 1 ($n_1$):</label>
+                                <span class="slider-val" id="val-n1">1.00 (Aire)</span>
+                            </div>
+                            <input type="range" id="slider-n1" min="1.00" max="2.50" step="0.01" value="1.00">
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header">
+                                <label for="slider-n2">Índice de refracción Medio 2 ($n_2$):</label>
+                                <span class="slider-val" id="val-n2">1.33 (Agua)</span>
+                            </div>
+                            <input type="range" id="slider-n2" min="1.00" max="2.50" step="0.01" value="1.33">
+                        </div>
+                    </div>
+
+                    <!-- Panel de Telemetría y Validación -->
+                    <div class="telemetry-grid">
+                        <div class="tele-box">
+                            <span class="tele-label">Ángulo Reflejado ($\theta_r = \theta_i$):</span>
+                            <span class="tele-value" id="tele-ref">35.0° (Validado)</span>
+                        </div>
+                        <div class="tele-box">
+                            <span class="tele-label">Ángulo Refractado ($\theta_t$):</span>
+                            <span class="tele-value" id="tele-tra">25.5°</span>
+                        </div>
+                        <div class="tele-box">
+                            <span class="tele-label">Ángulo Crítico ($\theta_c$):</span>
+                            <span class="tele-value" id="tele-crit">No aplica (n₁ ≤ n₂)</span>
+                        </div>
+                        <div class="tele-box">
+                            <span class="tele-label">Validación Ley de Snell:</span>
+                            <span class="tele-value" id="tele-snell">0.5736 = 0.5736</span>
+                        </div>
+                    </div>
+
+                    <div id="status-banner" class="status-banner status-refraction">
+                        Refracción ordinaria: al entrar a un medio más denso ($n_1 &lt; n_2$), el rayo se acerca a la normal ($\theta_t &lt; \theta_i$).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="poster-footer">
+        <strong>Vida Normal de un Estudiante de Física y Matemáticas</strong> • José Moisés Arias • Recurso Interactivo de Óptica Geométrica
+    </footer>
+</div>
+
+<script>
+    // Referencias DOM
+    const sliderTheta = document.getElementById('slider-theta');
+    const sliderN1 = document.getElementById('slider-n1');
+    const sliderN2 = document.getElementById('slider-n2');
+
+    const valTheta = document.getElementById('val-theta');
+    const valN1 = document.getElementById('val-n1');
+    const valN2 = document.getElementById('val-n2');
+
+    const teleRef = document.getElementById('tele-ref');
+    const teleTra = document.getElementById('tele-tra');
+    const teleCrit = document.getElementById('tele-crit');
+    const teleSnell = document.getElementById('tele-snell');
+    const statusBanner = document.getElementById('status-banner');
+
+    const bgMed1 = document.getElementById('bg-med1');
+    const bgMed2 = document.getElementById('bg-med2');
+    const labelMed1 = document.getElementById('label-med1');
+    const labelMed2 = document.getElementById('label-med2');
+
+    const rayInc1 = document.getElementById('ray-inc-1');
+    const rayInc2 = document.getElementById('ray-inc-2');
+    const rayRef1 = document.getElementById('ray-ref-1');
+    const rayRef2 = document.getElementById('ray-ref-2');
+    const rayTra1 = document.getElementById('ray-tra-1');
+    const rayTra2 = document.getElementById('ray-tra-2');
+    const groupRefracted = document.getElementById('group-refracted');
+
+    const arcInc = document.getElementById('arc-inc');
+    const arcRef = document.getElementById('arc-ref');
+    const arcTra = document.getElementById('arc-tra');
+
+    const txtThetaI = document.getElementById('txt-theta-i');
+    const txtThetaR = document.getElementById('txt-theta-r');
+    const txtThetaT = document.getElementById('txt-theta-t');
+
+    const criticalGuides = document.getElementById('critical-guides');
+    const critLineLeft = document.getElementById('crit-line-left');
+    const critLineRight = document.getElementById('crit-line-right');
+    const critLabel = document.getElementById('crit-label');
+
+    // Dibujar marcas de transportador cada 10 grados
+    (function buildProtractor() {
+        const container = document.getElementById('protractor-ticks');
+        const cx = 210, cy = 170, rOuter = 115;
+        for (let deg = 10; deg <= 80; deg += 10) {
+            const rad = deg * Math.PI / 180;
+            const rInner = (deg % 30 === 0) ? rOuter - 8 : rOuter - 4;
+            const sx = Math.sin(rad);
+            const cyTop = Math.cos(rad);
+
+            // 4 cuadrantes simétricos respecto a la normal
+            const quads = [
+                [-sx, -cyTop], [sx, -cyTop],
+                [-sx, cyTop],  [sx, cyTop]
+            ];
+            quads.forEach(([dx, dy]) => {
+                const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                tick.setAttribute('x1', (cx + rInner * dx).toFixed(1));
+                tick.setAttribute('y1', (cy + rInner * dy).toFixed(1));
+                tick.setAttribute('x2', (cx + rOuter * dx).toFixed(1));
+                tick.setAttribute('y2', (cy + rOuter * dy).toFixed(1));
+                tick.setAttribute('stroke', '#94a3b8');
+                tick.setAttribute('stroke-width', deg % 30 === 0 ? '1.3' : '0.8');
+                container.appendChild(tick);
+            });
+
+            if (deg === 30 || deg === 60) {
+                const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                lbl.setAttribute('x', (cx - (rOuter + 14) * sx - 7).toFixed(1));
+                lbl.setAttribute('y', (cy - (rOuter + 10) * cyTop + 3).toFixed(1));
+                lbl.setAttribute('font-size', '8.5');
+                lbl.setAttribute('fill', '#64748b');
+                lbl.textContent = deg + '°';
+                container.appendChild(lbl);
+            }
+        }
+    })();
+
+    function getMediumName(n) {
+        if (n <= 1.02) return 'Aire / Vacío';
+        if (Math.abs(n - 1.33) <= 0.02) return 'Agua';
+        if (Math.abs(n - 1.36) <= 0.01) return 'Etanol';
+        if (Math.abs(n - 1.46) <= 0.01) return 'Revestimiento / Sílice';
+        if (Math.abs(n - 1.48) <= 0.01) return 'Núcleo Fibra / Acrílico';
+        if (Math.abs(n - 1.52) <= 0.03) return 'Vidrio Crown';
+        if (Math.abs(n - 1.66) <= 0.03) return 'Vidrio Flint';
+        if (n >= 2.38) return 'Diamante';
+        return 'Medio Dieléctrico';
+    }
+
+    function getMediumColor(n) {
+        // Interpola un azul celeste más intenso conforme aumenta n
+        const t = Math.min(1, Math.max(0, (n - 1.0) / 1.5));
+        const r = Math.round(248 - t * 62);
+        const g = Math.round(250 - t * 32);
+        const b = Math.round(252 - t * 4);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function updateSimulation() {
+        const thetaI = parseFloat(sliderTheta.value);
+        const n1 = parseFloat(sliderN1.value);
+        const n2 = parseFloat(sliderN2.value);
+
+        const med1Name = getMediumName(n1);
+        const med2Name = getMediumName(n2);
+
+        valTheta.textContent = `${thetaI.toFixed(1)}°`;
+        valN1.textContent = `${n1.toFixed(2)} (${med1Name})`;
+        valN2.textContent = `${n2.toFixed(2)} (${med2Name})`;
+
+        bgMed1.setAttribute('fill', getMediumColor(n1));
+        bgMed2.setAttribute('fill', getMediumColor(n2));
+        labelMed1.textContent = `Medio 1: n₁ = ${n1.toFixed(2)} (${med1Name})`;
+        labelMed2.textContent = `Medio 2: n₂ = ${n2.toFixed(2)} (${med2Name})`;
+
+        const cx = 210, cy = 170;
+        const L = 138;
+        const radI = thetaI * Math.PI / 180;
+        const sinI = Math.sin(radI);
+        const cosI = Math.cos(radI);
+
+        // 1. Rayo Incidente (cuadrante superior izquierdo hacia (cx, cy))
+        const xIncStart = cx - L * sinI;
+        const yIncStart = cy - L * cosI;
+        const xIncMid = cx - (L * 0.52) * sinI;
+        const yIncMid = cy - (L * 0.52) * cosI;
+
+        rayInc1.setAttribute('x1', xIncStart.toFixed(1));
+        rayInc1.setAttribute('y1', yIncStart.toFixed(1));
+        rayInc1.setAttribute('x2', xIncMid.toFixed(1));
+        rayInc1.setAttribute('y2', yIncMid.toFixed(1));
+        rayInc2.setAttribute('x1', xIncMid.toFixed(1));
+        rayInc2.setAttribute('y1', yIncMid.toFixed(1));
+        rayInc2.setAttribute('x2', cx);
+        rayInc2.setAttribute('y2', cy);
+
+        // 2. Rayo Reflejado (cuadrante superior derecho desde (cx, cy), θr = θi)
+        const xRefEnd = cx + L * sinI;
+        const yRefEnd = cy - L * cosI;
+        const xRefMid = cx + (L * 0.55) * sinI;
+        const yRefMid = cy - (L * 0.55) * cosI;
+
+        rayRef1.setAttribute('x1', cx);
+        rayRef1.setAttribute('y1', cy);
+        rayRef1.setAttribute('x2', xRefMid.toFixed(1));
+        rayRef1.setAttribute('y2', yRefMid.toFixed(1));
+        rayRef2.setAttribute('x1', xRefMid.toFixed(1));
+        rayRef2.setAttribute('y1', yRefMid.toFixed(1));
+        rayRef2.setAttribute('x2', xRefEnd.toFixed(1));
+        rayRef2.setAttribute('y2', yRefEnd.toFixed(1));
+
+        // Arcos de incidencia y reflexión
+        const rArc = 40;
+        if (thetaI > 1.5) {
+            const axI = cx - rArc * sinI;
+            const ayI = cy - rArc * cosI;
+            arcInc.setAttribute('d', `M ${cx} ${cy - rArc} A ${rArc} ${rArc} 0 0 0 ${axI.toFixed(1)} ${ayI.toFixed(1)}`);
+
+            const axR = cx + rArc * sinI;
+            const ayR = cy - rArc * cosI;
+            arcRef.setAttribute('d', `M ${cx} ${cy - rArc} A ${rArc} ${rArc} 0 0 1 ${axR.toFixed(1)} ${ayR.toFixed(1)}`);
+
+            const halfRadI = radI / 2;
+            txtThetaI.setAttribute('x', (cx - (rArc + 16) * Math.sin(halfRadI) - 6).toFixed(1));
+            txtThetaI.setAttribute('y', (cy - (rArc + 14) * Math.cos(halfRadI)).toFixed(1));
+            txtThetaI.textContent = `${thetaI.toFixed(1)}°`;
+
+            txtThetaR.setAttribute('x', (cx + (rArc + 12) * Math.sin(halfRadI)).toFixed(1));
+            txtThetaR.setAttribute('y', (cy - (rArc + 14) * Math.cos(halfRadI)).toFixed(1));
+            txtThetaR.textContent = `${thetaI.toFixed(1)}°`;
+        } else {
+            arcInc.setAttribute('d', '');
+            arcRef.setAttribute('d', '');
+            txtThetaI.textContent = '';
+            txtThetaR.textContent = '';
+        }
+
+        // 3. Evaluación de Ángulo Crítico y Ley de Snell
+        const snellLHS = n1 * sinI;
+        const sinT = (n1 / n2) * sinI;
+
+        let hasCritical = false;
+        let thetaCritDeg = null;
+        if (n1 > n2) {
+            hasCritical = true;
+            thetaCritDeg = Math.asin(n2 / n1) * 180 / Math.PI;
+            teleCrit.textContent = `${thetaCritDeg.toFixed(2)}°`;
+
+            // Dibujar líneas guía del ángulo crítico en el Medio 1
+            const radC = thetaCritDeg * Math.PI / 180;
+            const xCL = cx - L * Math.sin(radC);
+            const yCL = cy - L * Math.cos(radC);
+            const xCR = cx + L * Math.sin(radC);
+            const yCR = cy - L * Math.cos(radC);
+
+            criticalGuides.setAttribute('opacity', '1');
+            critLineLeft.setAttribute('x2', xCL.toFixed(1));
+            critLineLeft.setAttribute('y2', yCL.toFixed(1));
+            critLineRight.setAttribute('x2', xCR.toFixed(1));
+            critLineRight.setAttribute('y2', yCR.toFixed(1));
+            critLabel.setAttribute('x', (xCL - 24).toFixed(1));
+            critLabel.setAttribute('y', (yCL - 4).toFixed(1));
+            critLabel.textContent = `θc=${thetaCritDeg.toFixed(1)}°`;
+        } else {
+            teleCrit.textContent = 'No aplica (n₁ ≤ n₂)';
+            criticalGuides.setAttribute('opacity', '0');
+        }
+
+        teleRef.textContent = `${thetaI.toFixed(1)}° (θᵣ = θᵢ)`;
+
+        // Comprobar si hay Reflexión Interna Total (sinT >= 1)
+        if (sinT >= 0.99995) {
+            // REGIMEN DE REFLEXIÓN INTERNA TOTAL
+            groupRefracted.setAttribute('opacity', '0');
+            arcTra.setAttribute('d', '');
+            txtThetaT.textContent = '';
+
+            // Resaltar el rayo reflejado en rojo carmesí con 100% de intensidad
+            rayRef1.setAttribute('stroke', '#e11d48');
+            rayRef1.setAttribute('stroke-width', '3.5');
+            rayRef1.setAttribute('marker-end', 'url(#arrow-tir)');
+            rayRef2.setAttribute('stroke', '#e11d48');
+            rayRef2.setAttribute('stroke-width', '3.5');
+            arcRef.setAttribute('stroke', '#e11d48');
+
+            teleTra.textContent = 'Nula (100% Reflejada)';
+            teleSnell.textContent = `${snellLHS.toFixed(4)} > n₂ (${n2.toFixed(2)})`;
+
+            statusBanner.className = 'status-banner status-tir';
+            statusBanner.innerHTML = `⚡ <strong>Reflexión Interna Total (RIT):</strong> Como $\\theta_i (${thetaI.toFixed(1)}^\\circ) > \\theta_c (${thetaCritDeg.toFixed(2)}^\\circ)$, $\\sin\\theta_t = ${sinT.toFixed(3)} > 1$ y toda la luz se refleja.`;
+        } else {
+            // REGIMEN DE REFRACCIÓN ORDINARIA
+            groupRefracted.setAttribute('opacity', '1');
+
+            // Restaurar estilo normal del rayo reflejado
+            rayRef1.setAttribute('stroke', '#0d9488');
+            rayRef1.setAttribute('stroke-width', '2.4');
+            rayRef1.setAttribute('marker-end', 'url(#arrow-ref)');
+            rayRef2.setAttribute('stroke', '#0d9488');
+            rayRef2.setAttribute('stroke-width', '2.4');
+            arcRef.setAttribute('stroke', '#0d9488');
+
+            const radT = Math.asin(sinT);
+            const thetaT = radT * 180 / Math.PI;
+            const cosT = Math.cos(radT);
+
+            const xTraEnd = cx + L * sinT;
+            const yTraEnd = cy + L * cosT;
+            const xTraMid = cx + (L * 0.55) * sinT;
+            const yTraMid = cy + (L * 0.55) * cosT;
+
+            rayTra1.setAttribute('x1', cx);
+            rayTra1.setAttribute('y1', cy);
+            rayTra1.setAttribute('x2', xTraMid.toFixed(1));
+            rayTra1.setAttribute('y2', yTraMid.toFixed(1));
+            rayTra2.setAttribute('x1', xTraMid.toFixed(1));
+            rayTra2.setAttribute('y1', yTraMid.toFixed(1));
+            rayTra2.setAttribute('x2', xTraEnd.toFixed(1));
+            rayTra2.setAttribute('y2', yTraEnd.toFixed(1));
+
+            if (thetaT > 1.5) {
+                const axT = cx + rArc * sinT;
+                const ayT = cy + rArc * cosT;
+                arcTra.setAttribute('d', `M ${cx} ${cy + rArc} A ${rArc} ${rArc} 0 0 0 ${axT.toFixed(1)} ${ayT.toFixed(1)}`);
+
+                const halfRadT = radT / 2;
+                txtThetaT.setAttribute('x', (cx + (rArc + 13) * Math.sin(halfRadT)).toFixed(1));
+                txtThetaT.setAttribute('y', (cy + (rArc + 17) * Math.cos(halfRadT)).toFixed(1));
+                txtThetaT.textContent = `${thetaT.toFixed(1)}°`;
+            } else {
+                arcTra.setAttribute('d', '');
+                txtThetaT.textContent = '';
+            }
+
+            const snellRHS = n2 * Math.sin(radT);
+            teleTra.textContent = `${thetaT.toFixed(2)}°`;
+            teleSnell.textContent = `${snellLHS.toFixed(4)} = ${snellRHS.toFixed(4)} ✓`;
+
+            if (thetaI === 0) {
+                statusBanner.className = 'status-banner status-refraction';
+                statusBanner.innerHTML = `<strong>Incidencia Normal ($\\theta_i = 0^\\circ$):</strong> El haz atraviesa la interfaz sin desviarse ($\\theta_t = 0^\\circ$).`;
+            } else if (hasCritical && Math.abs(thetaI - thetaCritDeg) <= 0.6) {
+                statusBanner.className = 'status-banner status-critical';
+                statusBanner.innerHTML = `⚠️ <strong>Umbral Crítico ($\\theta_i \\approx \\theta_c$):</strong> El rayo refractado emerge rasante a la interfaz ($\\theta_t \\approx 90^\\circ$).`;
+            } else if (n1 < n2) {
+                statusBanner.className = 'status-banner status-refraction';
+                statusBanner.innerHTML = `<strong>Refracción ($n_1 &lt; n_2$):</strong> Al entrar a un medio ópticamente más denso, el rayo se acerca a la normal ($\\theta_t = ${thetaT.toFixed(1)}^\\circ &lt; \\theta_i$).`;
+            } else if (n1 > n2) {
+                statusBanner.className = 'status-banner status-refraction';
+                statusBanner.innerHTML = `<strong>Refracción ($n_1 &gt; n_2$):</strong> Al pasar a un medio menos denso, el rayo se aleja de la normal ($\\theta_t = ${thetaT.toFixed(1)}^\\circ &gt; \\theta_i$).`;
+            } else {
+                statusBanner.className = 'status-banner status-refraction';
+                statusBanner.innerHTML = `<strong>Medios Ópticamente Idénticos ($n_1 = n_2$):</strong> No existe contraste de índice; el haz continúa en línea recta ($\\theta_t = \\theta_i$).`;
+            }
+        }
+
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([statusBanner]).catch(() => {});
+        }
+    }
+
+    function setPreset(theta, n1, n2) {
+        sliderTheta.value = theta;
+        sliderN1.value = n1.toFixed(2);
+        sliderN2.value = n2.toFixed(2);
+        updateSimulation();
+    }
+
+    sliderTheta.addEventListener('input', updateSimulation);
+    sliderN1.addEventListener('input', updateSimulation);
+    sliderN2.addEventListener('input', updateSimulation);
+
+    // Inicializar estado
+    updateSimulation();
+
+    // Calibración automática para impresión en 1 hoja A3 Horizontal
+    function calibrarImpresionA3() {
+        const poster = document.querySelector('.poster-container');
+        if (!poster) return;
+        const anchoHoja = 1587;
+        const altoHoja = 1122;
+        const margen = 32;
+
+        poster.style.width = '1520px';
+        poster.style.transform = 'none';
+
+        const anchoReal = poster.scrollWidth;
+        const altoReal = poster.scrollHeight;
+        const escala = Math.min((anchoHoja - margen) / anchoReal, (altoHoja - margen) / altoReal);
+
+        const offsetX = (anchoHoja - anchoReal * escala) / 2;
+        const offsetY = (altoHoja - altoReal * escala) / 2;
+        poster.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${escala})`;
+    }
+
+    function restaurarVistaPantalla() {
+        const poster = document.querySelector('.poster-container');
+        if (!poster) return;
+        poster.style.width = '';
+        poster.style.transform = '';
+    }
+
+    window.addEventListener('beforeprint', calibrarImpresionA3);
+    window.addEventListener('afterprint', restaurarVistaPantalla);
+</script>
+
+</body>
+</html>
